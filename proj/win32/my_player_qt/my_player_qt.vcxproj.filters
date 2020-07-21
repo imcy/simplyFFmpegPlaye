@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{f1ac05da-5222-4871-8048-6ebb04464b8d}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{79fa5063-c456-4aa2-8433-0bd223aa2e79}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="queue">
+      <UniqueIdentifier>{0296a57b-27a2-429a-86fe-a1ab33e76b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media">
+      <UniqueIdentifier>{b05b2850-3e69-4463-823c-01d7f9ac2835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{b08ae008-251c-4753-a487-bcb7875b1dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{3953bfdb-4c29-44d4-b178-38d5eb246252}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="my_player_qt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="my_player_qt.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="my_player_qt.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\playerIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\win32\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\queue\frameQueue.cpp">
+      <Filter>queue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\queue\packetQueue.cpp">
+      <Filter>queue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\media\playerAudio.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\media\playerMedia.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\media\playerMediaTimer.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_playerMediaTimer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_playerMediaTimer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\media\playerVideo.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\media\readPacketsThread.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_readPacketsThread.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_readPacketsThread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\log\logger.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\player\myPlayerQt.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_myPlayerQt.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_myPlayerQt.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\player\slider.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_slider.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_slider.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\win32\player\videoWidget.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_videoWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_videoWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\win32\queue\frameQueue.h">
+      <Filter>queue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\win32\queue\packetQueue.h">
+      <Filter>queue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\win32\media\playerAudio.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\win32\media\playerMedia.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\win32\media\playerVideo.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\win32\log\logger.h">
+      <Filter>log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\..\src\win32\media\playerMediaTimer.h">
+      <Filter>media</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\src\win32\media\readPacketsThread.h">
+      <Filter>media</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\src\win32\player\myPlayerQt.h">
+      <Filter>player</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\src\win32\player\slider.h">
+      <Filter>player</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\src\win32\player\videoWidget.h">
+      <Filter>player</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>
