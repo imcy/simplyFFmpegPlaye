@@ -107,7 +107,8 @@ void myPlayerQt::netAddressInput()
 		QString::fromLocal8Bit("请输入地址"),
 		QLineEdit::Normal, QString::null, &ok);
 	int type = url;
-	if (ok && !name.isEmpty() && formatCheck(name, type)) 
+	/*if (ok && !name.isEmpty() && formatCheck(name, type)) */
+	if (ok && !name.isEmpty())
 	{
 		addVideoItem(name, type);
 		openVideo(name, type);
@@ -206,7 +207,7 @@ void myPlayerQt::play()
 	{
 		ui.playButton->setStyleSheet(PAUSE);
 		ui.pauseAction->setText(QString::fromLocal8Bit("暂停"));
-		if (playerMedia::getInstance()->getAVFormatContext())
+		if (playerMedia::getInstance()->audio->getAVCodecContext())
 			playerMedia::getInstance()->audio->audioOpen();
 	}
 	else
@@ -653,17 +654,24 @@ void myPlayerQt::showVideoInfo(playerMedia *media)
 	ui.videoInfo->append(QString::fromLocal8Bit(buf));
 
 	AVCodecContext *videoCtx = media->video->getAVCodecContext();
-	sprintf(buf, "视频解码器: %s\n 视频尺寸：%dx%d\n",
-		videoCtx->codec->name,
-		videoCtx->width, videoCtx->height);
-	ui.videoInfo->append(QString::fromLocal8Bit(buf));
-
+	if (videoCtx)
+	{
+		sprintf(buf, "视频解码器: %s\n 视频尺寸：%dx%d\n",
+			videoCtx->codec->name,
+			videoCtx->width, videoCtx->height);
+		ui.videoInfo->append(QString::fromLocal8Bit(buf));
+	}
+	
 	AVCodecContext *audioCtx = media->audio->getAVCodecContext();
-	sprintf(buf, "音频解码器: %s\n采样率：%d\n声道数：%d\n\n",
-		audioCtx->codec->name,
-		audioCtx->sample_rate,
-		audioCtx->channels);
-	ui.videoInfo->append(QString::fromLocal8Bit(buf));
+	if (audioCtx)
+	{
+		sprintf(buf, "音频解码器: %s\n采样率：%d\n声道数：%d\n\n",
+			audioCtx->codec->name,
+			audioCtx->sample_rate,
+			audioCtx->channels);
+		ui.videoInfo->append(QString::fromLocal8Bit(buf));
+	}
+	
 
 }
 

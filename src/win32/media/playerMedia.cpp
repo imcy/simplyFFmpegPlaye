@@ -91,59 +91,66 @@ playerMedia * playerMedia::open()
 			video->setStreamIndex(i);
 	}
 
-	if (audio->getStreamIndex() < 0 || video->getStreamIndex() < 0) {
+	if (audio->getStreamIndex() < 0 && video->getStreamIndex() < 0) {
 		return nullptr;
 	}
 
-	// set audio
-	AVCodec *pCodecAudio = avcodec_find_decoder(pFormatCtx->streams[audio->getStreamIndex()]->codec->codec_id);
-	if (!pCodecAudio)
+	if (audio->getStreamIndex() > 0)
 	{
-		LOG(LOG_ERROR) << "Audio code not find!" << std::endl;
-		return nullptr;
-	}
-	audio->setAVCodecContext(avcodec_alloc_context3(pCodecAudio));
-	audio->setStream(pFormatCtx->streams[audio->getStreamIndex()]);
+		// set audio
+		AVCodec *pCodecAudio = avcodec_find_decoder(pFormatCtx->streams[audio->getStreamIndex()]->codec->codec_id);
+		if (!pCodecAudio)
+		{
+			LOG(LOG_ERROR) << "Audio code not find!" << std::endl;
+			return nullptr;
+		}
+		audio->setAVCodecContext(avcodec_alloc_context3(pCodecAudio));
+		audio->setStream(pFormatCtx->streams[audio->getStreamIndex()]);
 
-	if (avcodec_copy_context(audio->getAVCodecContext(), 
-		pFormatCtx->streams[audio->getStreamIndex()]->codec) != 0) {
-		LOG(LOG_ERROR) << "Audio stream can not copy to context!" << std::endl;
-		return nullptr;
-	}
+		if (avcodec_copy_context(audio->getAVCodecContext(),
+			pFormatCtx->streams[audio->getStreamIndex()]->codec) != 0) {
+			LOG(LOG_ERROR) << "Audio stream can not copy to context!" << std::endl;
+			return nullptr;
+		}
 
-	errCode = avcodec_open2(audio->getAVCodecContext(), pCodecAudio, nullptr);
-	if (errCode != 0)
-	{
-		av_strerror(errCode, errorbuf, sizeof(errorbuf));
-		return nullptr;
+		errCode = avcodec_open2(audio->getAVCodecContext(), pCodecAudio, nullptr);
+		if (errCode != 0)
+		{
+			av_strerror(errCode, errorbuf, sizeof(errorbuf));
+			return nullptr;
+		}
+		audio->audioOpen();
 	}
-	//set video
-	AVCodec *pCodecVideo = avcodec_find_decoder(pFormatCtx->streams[video->getStreamIndex()]->codec->codec_id);
-	if (!pCodecVideo) {
-		LOG(LOG_ERROR) << "Video code not find!" << std::endl;
-		return nullptr;
-	}
-
-	video->setVideoStream(pFormatCtx->streams[video->getStreamIndex()]);
-	video->setAVCodecContext(avcodec_alloc_context3(pCodecVideo));
-	if (avcodec_copy_context(video->getAVCodecContext(), 
-		pFormatCtx->streams[video->getStreamIndex()]->codec) != 0) {
-		LOG(LOG_ERROR) << "Video stream can not copy to context!" << std::endl;
-		return nullptr;
-	}
-
-	errCode = avcodec_open2(video->getAVCodecContext(), pCodecVideo, nullptr);
-	if (errCode != 0)
-	{
-		av_strerror(errCode, errorbuf, sizeof(errorbuf));
-		return nullptr;
-	}
-	totalTime = ((pFormatCtx->duration / AV_TIME_BASE) * 1000);
 	
-	video->setFrameTimer(static_cast<double>(av_gettime()) / 1000000.0);
-	video->setFrameLastDelay(40e-3);
-	audio->audioOpen();
-	video->setPlaying(true);
+	if (video->getStreamIndex() > 0)
+	{
+		//set video
+		AVCodec *pCodecVideo = avcodec_find_decoder(pFormatCtx->streams[video->getStreamIndex()]->codec->codec_id);
+		if (!pCodecVideo) {
+			LOG(LOG_ERROR) << "Video code not find!" << std::endl;
+			return nullptr;
+		}
+
+		video->setVideoStream(pFormatCtx->streams[video->getStreamIndex()]);
+		video->setAVCodecContext(avcodec_alloc_context3(pCodecVideo));
+		if (avcodec_copy_context(video->getAVCodecContext(),
+			pFormatCtx->streams[video->getStreamIndex()]->codec) != 0) {
+			LOG(LOG_ERROR) << "Video stream can not copy to context!" << std::endl;
+			return nullptr;
+		}
+
+		errCode = avcodec_open2(video->getAVCodecContext(), pCodecVideo, nullptr);
+		if (errCode != 0)
+		{
+			av_strerror(errCode, errorbuf, sizeof(errorbuf));
+			return nullptr;
+		}
+		totalTime = ((pFormatCtx->duration / AV_TIME_BASE) * 1000);
+
+		video->setFrameTimer(static_cast<double>(av_gettime()) / 1000000.0);
+		video->setFrameLastDelay(40e-3);
+		video->setPlaying(true);
+	}
 
 	readPacketsThread::getInstance()->setPlaying(true);
 	playerMediaTimer::getInstance()->setPlay(true);
