@@ -116,6 +116,10 @@ public slots:
 		@brief 打开本地视频
 	*/
 	void open();
+	/**
+	@brief 关闭视频
+	*/
+	void close();
 	/** 
 		@brief 打开网络流视频
 	*/
@@ -163,4 +167,8 @@ private:
 	QMenu *popMenu; ///< 鼠标右键弹出菜单
 	int windowWidth; ///< 视频显示窗口宽度（随播放列表的显示变化）
 	QMovie* movie; ///< 加载gif格式的loading图标
+	char textBuf[1024];
+	int pauseTime;
+	double bufferTime;
+	QElapsedTimer playTime;
 };

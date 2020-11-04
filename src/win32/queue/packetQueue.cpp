@@ -45,6 +45,11 @@ uint32_t packetQueue::getPacketSize()
 	return size;
 }
 
+uint32_t packetQueue::getPacketCount()
+{
+	QMutexLocker locker(&mutex);
+	return queue.size();
+}
 
 void packetQueue::queueFlush()
 {
@@ -60,3 +65,4 @@ packetQueue::~packetQueue()
 	QMutexLocker locker(&mutex);
 	isExit = true;
 }
+

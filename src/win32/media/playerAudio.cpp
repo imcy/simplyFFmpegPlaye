@@ -15,6 +15,7 @@ playerAudio::playerAudio()
 	streamIndex = -1;
 	stream = nullptr;
 	audioClock = 0;
+
 	audioBuff = new uint8_t[BUFFERSIZE];
 	audioBuffSize = 0;
 	audioBuffIndex = 0;
@@ -27,11 +28,19 @@ bool playerAudio::audioClose()
 		SDL_CloseAudio();
 		SDL_Quit();
 	}
+	clearPacket();
 	if (audioBuff)
 	{
 		delete[] audioBuff;
 		audioBuff = nullptr;
 	}
+	if (audioContext)
+	{
+		avcodec_free_context(&audioContext);
+		audioContext = nullptr;
+	}
+	
+	audioClock = 0;
 	return true;
 }
 
@@ -41,9 +50,13 @@ bool playerAudio::audioOpen()
 		LOG(LOG_ERROR) << "Could not initialize SDL - " << SDL_GetError() << std::endl;
 		return false;
 	}
-	audioBuff = new uint8_t[BUFFERSIZE];
-	audioBuffSize = 0;
-	audioBuffIndex = 0;
+
+	if (!audioBuff)
+	{
+		audioBuff = new uint8_t[BUFFERSIZE];
+		audioBuffSize = 0;
+		audioBuffIndex = 0;
+	}
 
 	SDL_AudioSpec desired;
 	desired.freq = audioContext->sample_rate;
@@ -94,6 +107,11 @@ void playerAudio::setAVCodecContext(AVCodecContext * audioContext)
 int playerAudio::getAudioQueueSize()
 {
 	return audioPackets.getPacketSize();
+}
+
+int playerAudio::getAudioQueueCount()
+{
+	return audioPackets.getPacketCount();
 }
 
 void playerAudio::clearPacket()
@@ -177,11 +195,6 @@ void playerAudio::setVolume(int volume)
 playerAudio::~playerAudio()
 {
 	audioClose();
-	if (audioBuff)
-	{
-		delete[] audioBuff;
-		audioBuff = nullptr;
-	}
 }
 
 int audioDecodeFrame(playerAudio * audio, uint8_t * audioBuffer, int bufferSize)

@@ -14,16 +14,15 @@ static double r2d(AVRational r)
 {
 	return r.num == 0 || r.den == 0 ? 0. : (double)r.num / (double)r.den;
 }
-
-static bool isExit = false;
 static int count = 0;
 
 readPacketsThread::readPacketsThread()
 {
+	isExit = false;
 }
 
 void readPacketsThread::run()
-{
+{	
 	AVPacket *packet = (AVPacket *)av_malloc(sizeof(AVPacket));
 	av_init_packet(packet);
 
@@ -117,12 +116,13 @@ void readPacketsThread::run()
 
 		
 	}
-
-	if (packet)
+/*
+	if (packet->buf)
 	{
 		av_free_packet(packet);
 
 	}
+*/
 }
 
 bool readPacketsThread::getIsPlaying()
@@ -145,10 +145,14 @@ void readPacketsThread::receivePos(float pos)
 	isSeek = true;
 }
 
-readPacketsThread::~readPacketsThread()
+void readPacketsThread::stop()
 {
 	QMutexLocker locker(&mutex);
 	isExit = true;
 	locker.unlock();
 	wait();
+}
+readPacketsThread::~readPacketsThread()
+{
+	stop();
 }

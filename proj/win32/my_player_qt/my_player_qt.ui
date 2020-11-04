@@ -78,7 +78,7 @@ color:rgb(0, 0, 0)</string>
 border:1px</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <property name="styleSheet">
@@ -129,8 +129,116 @@ border-color:rgb(35, 35, 35)</string>
         <x>0</x>
         <y>0</y>
         <width>200</width>
-        <height>440</height>
+        <height>421</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="videoPackets">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+font: 14px;
+background-color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>视频包数目：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="audioPackets">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+font: 14px;
+background-color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>音频包数目：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="pauseTime">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+font: 14px;
+background-color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>卡顿次数：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="bufferTime">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>250</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+font: 14px;
+background-color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>平均缓冲时间：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="openTime">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+font: 14px;
+background-color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>打开时间：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="playTime">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>270</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);
+font: 14px;
+background-color: transparent;</string>
+      </property>
+      <property name="text">
+       <string>播放时间：</string>
       </property>
      </widget>
     </widget>
@@ -391,6 +499,7 @@ background-color: transparent;</string>
     <addaction name="nextVideo"/>
     <addaction name="volumeMute"/>
     <addaction name="pauseAction"/>
+    <addaction name="stopVideo"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -461,6 +570,16 @@ background-color: transparent;</string>
   <action name="screenshotAction">
    <property name="text">
     <string>截图</string>
+   </property>
+  </action>
+  <action name="actioncloseLocalFile">
+   <property name="text">
+    <string>closeLocalFile</string>
+   </property>
+  </action>
+  <action name="stopVideo">
+   <property name="text">
+    <string>关闭</string>
    </property>
   </action>
  </widget>
@@ -766,6 +885,22 @@ background-color: transparent;</string>
     <hint type="destinationlabel">
      <x>422</x>
      <y>464</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stopVideo</sender>
+   <signal>triggered()</signal>
+   <receiver>myPlayerQtClass</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>252</y>
     </hint>
    </hints>
   </connection>

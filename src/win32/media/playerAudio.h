@@ -41,6 +41,7 @@ public:
 	void setAVCodecContext(AVCodecContext *audioContext);
 
 	int getAudioQueueSize();
+	int getAudioQueueCount();
 	void clearPacket();
 	
 	void enqueuePacket(const AVPacket packet);

@@ -159,17 +159,19 @@
     <QtMoc Include="..\..\..\src\win32\media\playerMediaTimer.h">
       <Filter>media</Filter>
     </QtMoc>
-    <QtMoc Include="..\..\..\src\win32\media\readPacketsThread.h">
-      <Filter>media</Filter>
-    </QtMoc>
-    <QtMoc Include="..\..\..\src\win32\player\myPlayerQt.h">
-      <Filter>player</Filter>
-    </QtMoc>
     <QtMoc Include="..\..\..\src\win32\player\slider.h">
       <Filter>player</Filter>
     </QtMoc>
     <QtMoc Include="..\..\..\src\win32\player\videoWidget.h">
       <Filter>player</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\src\win32\player\myPlayerQt.h">
+      <Filter>player</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\src\win32\media\readPacketsThread.h">
+      <Filter>media</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

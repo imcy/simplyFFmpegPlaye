@@ -1,5 +1,4 @@
 #include "playerVideo.h"
-static bool isExit = false;
 
 static int audioVolume = 64;
 playerVideo::playerVideo()
@@ -9,6 +8,7 @@ playerVideo::playerVideo()
 	frameLastPts = 0.0;
 	videoClock = 0.0;
 	videoPackets = new packetQueue;
+	isExit = false;
 }
 
 void playerVideo::run()
@@ -111,6 +111,11 @@ int playerVideo::getVideoQueueSize()
 	return videoPackets->getPacketSize();
 }
 
+int playerVideo::getVideoQueueCount()
+{
+	return videoPackets->getPacketCount();
+}
+
 void playerVideo::enqueuePacket(const AVPacket packet)
 {
 	videoPackets->enQueue(packet);
@@ -186,12 +191,26 @@ void playerVideo::clearPackets()
 	videoPackets->queueFlush();
 }
 
-
-playerVideo::~playerVideo()
+void playerVideo::stop()
 {
 	QMutexLocker locker(&mutex);
 	isExit = true;
+	clearFrames();
+	clearPackets();
+
 	delete videoPackets;
+	videoPackets = nullptr;
+	if (videoContext)
+	{
+		avcodec_free_context(&videoContext);
+		videoContext = nullptr;
+	}
 	locker.unlock();
 	wait();
+}
+
+
+playerVideo::~playerVideo()
+{
+	stop();
 }

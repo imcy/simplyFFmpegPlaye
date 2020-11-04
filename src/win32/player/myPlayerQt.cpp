@@ -81,8 +81,14 @@ myPlayerQt::myPlayerQt(QWidget *parent)
 	ui.textLabel->hide();
 
 	startTimer(40);
-	readPacketsThread::getInstance()->start();
-	playerMedia::getInstance()->video->start();
+	pauseTime = 0;
+
+	sprintf(textBuf, "卡顿次数: %d\n", pauseTime);
+	ui.pauseTime->setText(QString::fromLocal8Bit(textBuf));
+	sprintf(textBuf, "平均缓冲时间: %.2f s\n", 0);
+	ui.bufferTime->setText(QString::fromLocal8Bit(textBuf));
+	sprintf(textBuf, "打开时间: %.2f s\n", 0);
+	ui.openTime->setText(QString::fromLocal8Bit(textBuf));
 }
 
 
@@ -97,6 +103,22 @@ void myPlayerQt::open()
 		openVideo(name, type);
 	}
 	
+}
+
+void myPlayerQt::close()
+{
+	if (isPlay)
+	{
+		readPacketsThread::getInstance()->stop();
+		readPacketsThread::getInstance()->exit();
+
+		playerMedia::getInstance()->video->exit();
+		playerMedia::getInstance()->close();
+		
+		playTime.invalidate();
+		isPlay = false;
+	}
+
 }
 
 void myPlayerQt::netAddressInput()
@@ -123,7 +145,7 @@ void myPlayerQt::openVideo(QString name, int type)
 	this->setWindowTitle(name);
 	ui.iconBackground->setVisible(false);
 	loadingShow(true, QString::fromLocal8Bit("正在打开..."));
-
+	pauseTime = 0;
 	if (isPlay)
 	{
 		play();
@@ -158,7 +180,7 @@ void myPlayerQt::openVideo(QString name, int type)
 	while (!openFinshed)
 	{
 		QCoreApplication::processEvents();
-		if (et.elapsed() > 20000)
+		if (et.elapsed() > 200000)
 		{
 			playerMedia::getInstance()->interruptFlag = true;
 			QMessageBox::warning(this, QString::fromLocal8Bit("错误"),
@@ -169,6 +191,14 @@ void myPlayerQt::openVideo(QString name, int type)
 			return;
 		}
 	}
+	auto time = et.elapsed() / 1000.0;
+	sprintf(textBuf, "打开时间: %.2f s\n", time);
+	ui.openTime->setText(QString::fromLocal8Bit(textBuf));
+	readPacketsThread::getInstance()->isExit = false;
+	readPacketsThread::getInstance()->start();
+	playerMedia::getInstance()->video->isExit = false;
+	playerMedia::getInstance()->video->start();
+	showVideoList();
 	if (media == nullptr)
 	{
 		QMessageBox::warning(this, QString::fromLocal8Bit("错误"), 
@@ -190,6 +220,7 @@ void myPlayerQt::openVideo(QString name, int type)
 	autoPause = false;
 	isPlay = false;
 	play();
+	playTime.start();
 }
 
 
@@ -373,12 +404,12 @@ void myPlayerQt::clickedVideoList(QListWidgetItem *item)
 
 void myPlayerQt::setPlayTime(double pts, double rate)
 {
-	char buf[1024] = { 0 };
+	memset(textBuf, 0, 1024);
 	int hour = (int)(pts / 1000000 / 60 / 60);
 	int min = (int)(pts / 1000000 / 60) % 60;
 	int sec = (int)(pts / 1000000) % 60 % 60;
-	sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
-	ui.curTime->setText(buf);
+	sprintf(textBuf, "%02d:%02d:%02d", hour, min, sec);
+	ui.curTime->setText(textBuf);
 	if (!isPressSlider && isPlay) {
 		ui.playSlider->setValue(rate);
 		if (playerMedia::getInstance()->type == local && 
@@ -397,6 +428,11 @@ void myPlayerQt::urlTimeoutCheck(double rate)
 {
 	if (isPlay && playerMedia::getInstance()->video->getVideoQueueSize() == 0)
 	{
+		pauseTime += 1;
+		
+		sprintf(textBuf, "卡顿次数: %d\n", pauseTime);
+		ui.pauseTime->setText(QString::fromLocal8Bit(textBuf));
+		
 		// 检查是否到了视频末尾
 		if ((int)rate >= (int)(ui.playSlider->maximum() - 20))
 		{
@@ -413,7 +449,7 @@ void myPlayerQt::urlTimeoutCheck(double rate)
 		et.start();
 		while (true)
 		{
-			if ( playerMedia::getInstance()->video->getVideoQueueSize() >= 80000)
+			if ( playerMedia::getInstance()->video->getVideoQueueCount() >= 100)
 			{
 				loadingShow(false, NULL);
 				autoPause = false;
@@ -427,6 +463,10 @@ void myPlayerQt::urlTimeoutCheck(double rate)
 				{
 					play();
 				}
+				bufferTime += et.elapsed() / 1000;
+
+				sprintf(textBuf, "平均缓冲时间: %.2f s\n", (bufferTime / pauseTime));
+				ui.bufferTime->setText(QString::fromLocal8Bit(textBuf));
 				break;
 			}
 			if (et.elapsed() > 20000)
@@ -471,7 +511,8 @@ bool myPlayerQt::formatCheck(QString name, int type)
 			|| postfix == QString::fromLocal8Bit("avi")
 			|| postfix == QString::fromLocal8Bit("mkv")
 			|| postfix == QString::fromLocal8Bit("mov")
-			|| postfix == QString::fromLocal8Bit("wmv"))
+			|| postfix == QString::fromLocal8Bit("wmv")
+			|| postfix == QString::fromLocal8Bit("h264"))
 		{
 			return true;
 		}
@@ -521,7 +562,23 @@ void myPlayerQt::timerEvent(QTimerEvent * pEvent)
 		}
 
 	}
-
+	if (playerMedia::getInstance()->video)
+	{
+		sprintf(textBuf, "视频包数目: %d\n", playerMedia::getInstance()->video->getVideoQueueCount());
+		ui.videoPackets->setText(QString::fromLocal8Bit(textBuf));
+	}
+	if (playerMedia::getInstance()->audio)
+	{
+		sprintf(textBuf, "音频数目: %d\n", playerMedia::getInstance()->audio->getAudioQueueSize());
+		ui.audioPackets->setText(QString::fromLocal8Bit(textBuf));
+	}
+	
+	if (playTime.isValid())
+	{
+		sprintf(textBuf, "播放时间: %.2f\n", playTime.elapsed() / 1000.0);
+		ui.playTime->setText(QString::fromLocal8Bit(textBuf));
+	}
+	
 }
 void myPlayerQt::resizeEvent(QResizeEvent *pEvent)
 {
@@ -632,47 +689,44 @@ void myPlayerQt::dropEvent(QDropEvent * pEvent)
 
 void myPlayerQt::showVideoInfo(playerMedia *media)
 {
-	char buf[1024] = { 0 };
+	memset(textBuf, 0, 1024);
 	double totalTime = media->totalTime;
 	int hour = (int)(totalTime / 1000 / 60 / 60);
 	int min = (int)(totalTime / 1000 / 60) % 60;
 	int sec = (int)(totalTime / 1000) % 60 % 60;
-	sprintf(buf, "%02d:%02d:%02d", hour, min, sec);
-	ui.totalTime->setText(buf);
+	sprintf(textBuf, "%02d:%02d:%02d", hour, min, sec);
+	ui.totalTime->setText(textBuf);
 
 	AVFormatContext * pFormatCtx = media->getAVFormatContext();
 	if (pFormatCtx == nullptr)
 	{
 		return;
 	}
-	sprintf(buf, "视频名称：%s\n封装格式：%s\n", 
+	sprintf(textBuf, "视频名称：%s\n封装格式：%s\n", 
 		pFormatCtx->filename,
 		pFormatCtx->iformat->name);
-	ui.videoInfo->append(QString::fromLocal8Bit(buf));
+	ui.videoInfo->append(QString::fromLocal8Bit(textBuf));
 
-	sprintf(buf, "视频时长：%02d:%02d:%02d\n", hour, min, sec);
-	ui.videoInfo->append(QString::fromLocal8Bit(buf));
+	sprintf(textBuf, "视频时长：%02d:%02d:%02d\n", hour, min, sec);
+	ui.videoInfo->append(QString::fromLocal8Bit(textBuf));
 
 	AVCodecContext *videoCtx = media->video->getAVCodecContext();
 	if (videoCtx)
 	{
-		sprintf(buf, "视频解码器: %s\n 视频尺寸：%dx%d\n",
+		sprintf(textBuf, "视频解码器: %s\n 视频尺寸：%dx%d\n",
 			videoCtx->codec->name,
 			videoCtx->width, videoCtx->height);
-		ui.videoInfo->append(QString::fromLocal8Bit(buf));
+		ui.videoInfo->append(QString::fromLocal8Bit(textBuf));
 	}
 	
 	AVCodecContext *audioCtx = media->audio->getAVCodecContext();
 	if (audioCtx)
 	{
-		sprintf(buf, "音频解码器: %s\n采样率：%d\n声道数：%d\n\n",
+		sprintf(textBuf, "音频解码器: %s\n采样率：%d\n声道数：%d\n\n",
 			audioCtx->codec->name,
 			audioCtx->sample_rate,
 			audioCtx->channels);
-		ui.videoInfo->append(QString::fromLocal8Bit(buf));
+		ui.videoInfo->append(QString::fromLocal8Bit(textBuf));
 	}
-	
 
 }
-
-

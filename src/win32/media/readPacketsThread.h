@@ -29,6 +29,7 @@ public:
 		配合主窗口进度条根据isSeek标志调用av_seek_frame()跳转至视频指定位置，
 	*/
 	void run();
+	void stop();
 	bool getIsPlaying();
 	/**
 		@brief 设置跳转标志
@@ -36,6 +37,7 @@ public:
 	bool getIsSeeking();
 	void setPlaying(bool isPlaying);
 	virtual ~readPacketsThread();
+	bool isExit;
 
 public slots:
 	/**

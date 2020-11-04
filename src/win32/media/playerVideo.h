@@ -33,6 +33,8 @@ public:
 		将frame放入帧队列，设置当前帧延时
 	*/
 	void run();
+	void stop();
+	bool isExit;
 	/**
 		@brief 设置当前视频流videoClock
 		
@@ -55,6 +57,7 @@ public:
 	void setAVCodecContext(AVCodecContext *videoContext);
 
 	int getVideoQueueSize();
+	int getVideoQueueCount();
 	void enqueuePacket(const AVPacket packet);
 	
 	AVFrame * dequeueFrame();

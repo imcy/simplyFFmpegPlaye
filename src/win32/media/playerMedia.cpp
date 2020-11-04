@@ -20,10 +20,9 @@ playerMedia::playerMedia()
 	av_register_all();
 	avformat_network_init();
 	pFormatCtx = nullptr;
-
-	audio = new playerAudio;
-	video = new playerVideo;
 	interruptFlag = false;
+	audio = nullptr;
+	video = nullptr;
 }
 int playerMedia::AVInterruptCallBackFun(void *param)
 {
@@ -53,6 +52,8 @@ playerMedia::~playerMedia()
 playerMedia * playerMedia::open()
 {
 	close();
+	audio = new playerAudio;
+	video = new playerVideo;
 	QMutexLocker locker(&mutex);
 	pFormatCtx = avformat_alloc_context();
 	pFormatCtx->interrupt_callback.callback = AVInterruptCallBackFun;
@@ -95,7 +96,7 @@ playerMedia * playerMedia::open()
 		return nullptr;
 	}
 
-	if (audio->getStreamIndex() > 0)
+	if (audio->getStreamIndex() >= 0)
 	{
 		// set audio
 		AVCodec *pCodecAudio = avcodec_find_decoder(pFormatCtx->streams[audio->getStreamIndex()]->codec->codec_id);
@@ -122,7 +123,7 @@ playerMedia * playerMedia::open()
 		audio->audioOpen();
 	}
 	
-	if (video->getStreamIndex() > 0)
+	if (video->getStreamIndex() >= 0)
 	{
 		//set video
 		AVCodec *pCodecVideo = avcodec_find_decoder(pFormatCtx->streams[video->getStreamIndex()]->codec->codec_id);
@@ -165,6 +166,7 @@ playerMedia * playerMedia::setMediaFile(const char * filename)
 
 bool playerMedia::checkMediaSizeValid()
 {
+	QMutexLocker locker(&mutex);
 	if (this->audio == nullptr || this->video == nullptr) {
 		return true;
 	}
@@ -210,24 +212,24 @@ void playerMedia::close()
 	QMutexLocker locker(&mutex);
 	totalTime = 0;
 	pts = 0;
-
-	audio->audioClose();
-	audio->clearPacket();
-	video->clearFrames();
-	video->clearPackets();
+	if (audio)
+	{
+		delete audio;
+		audio = nullptr;
+	}
+	
+	if (video)
+	{
+		video->setPlaying(false);
+		delete video;
+		video = nullptr;
+	}
 	
 	if (pFormatCtx) {
 		avformat_close_input(&pFormatCtx);
 		pFormatCtx = nullptr;
 	}
 
-	if (video->swsContext)
-	{
-		sws_freeContext(video->swsContext);
-		video->swsContext = nullptr;
-	}
-	
 	readPacketsThread::getInstance()->setPlaying(false);
 	playerMediaTimer::getInstance()->setPlay(false);
-	video->setPlaying(false);
 }

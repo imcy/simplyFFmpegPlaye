@@ -57,20 +57,21 @@ void playerMediaTimer::synchronizeAudioAndVideo()
 
 	AVFrame * frame;
 	frame = playerMedia::getInstance()->video->dequeueFrame();
+	AVCodecContext *videoCtx = playerMedia::getInstance()->video->getVideoStream()->codec;
+
+	// 将视频同步到音频上，计算下一帧的延迟时间
+	// 使用要播放的当前帧的PTS和上一帧的PTS差来估计播放下一帧的延迟时间
+	// 并根据video的播放速度来调整这个延迟时间
+	double current_pts = *(double*)frame->opaque;
+	double delay = current_pts - playerMedia::getInstance()->video->getFrameLastPts();
+	if (delay <= 0 || delay >= 1.0)
+		delay = playerMedia::getInstance()->video->getFrameLastDelay();
+
+	playerMedia::getInstance()->video->setFrameLastDelay(delay);
+	playerMedia::getInstance()->video->setFrameLastPts(current_pts);
 
 	if (playerMedia::getInstance()->audio->getAVCodecContext())
 	{
-		// 将视频同步到音频上，计算下一帧的延迟时间
-		// 使用要播放的当前帧的PTS和上一帧的PTS差来估计播放下一帧的延迟时间
-		// 并根据video的播放速度来调整这个延迟时间
-		double current_pts = *(double*)frame->opaque;
-		double delay = current_pts - playerMedia::getInstance()->video->getFrameLastPts();
-		if (delay <= 0 || delay >= 1.0)
-			delay = playerMedia::getInstance()->video->getFrameLastDelay();
-
-		playerMedia::getInstance()->video->setFrameLastDelay(delay);
-		playerMedia::getInstance()->video->setFrameLastPts(current_pts);
-
 		// double ref_clock = playerMedia::getInstance()->audio->getAudioClock();
 		double ref_clock = playerMedia::getInstance()->audio->getCurrentAudioClock();
 		double diff = current_pts - ref_clock;
@@ -84,7 +85,6 @@ void playerMediaTimer::synchronizeAudioAndVideo()
 			else if (diff >= threshold) // 快了，加倍delay
 				delay *= 2;
 		}
-
 		playerMedia::getInstance()->video->setFrameTimer(playerMedia::getInstance()->video->getFrameTimer() + delay);
 		double actual_delay = playerMedia::getInstance()->video->getFrameTimer() - static_cast<double>(av_gettime()) / 1000000.0;
 		if (actual_delay <= 0.010)
@@ -93,8 +93,6 @@ void playerMediaTimer::synchronizeAudioAndVideo()
 		timer->setInterval(static_cast<int>(actual_delay * 1000 + 0.5));
 	}
 	
-	AVCodecContext *videoCtx = playerMedia::getInstance()->video->getVideoStream()->codec;
-
 	int linesize[AV_NUM_DATA_POINTERS] = { 0 };
 	uint8_t *data[AV_NUM_DATA_POINTERS] = { 0 };
 	data[0] = (uint8_t *)img->bits();

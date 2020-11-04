@@ -1,19 +1,17 @@
+[AV_LOG_VERBOSE] Starting connection attempt to 10.212.0.157 port 1935
+[AV_LOG_VERBOSE] Successfully connected to 10.212.0.157 port 1935
 [AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'E:/faceswap_datasets/video/a_1.mp4':
-  Metadata:
-    major_brand     : mp42
-    minor_version   : 0
-    compatible_brands: mp41isom
-    creation_time   : 2019-11-07T11:12:35.000000Z
-  Duration: 00:01:00.74, start: 0.000000, bitrate: 2193 kb/s
-    Stream #0:0(und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], 2061 kb/s, 30.31 fps, 30.31 tbr, 30311 tbn, 60.62 tbc (default)
-    Metadata:
-      creation_time   : 2019-11-07T11:12:35.000000Z
-      handler_name    : VideoHandler
-      encoder         : AVC Coding
-    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      creation_time   : 2019-11-07T11:12:35.000000Z
-      handler_name    : SoundHandler
+[AV_LOG_VERBOSE] max_analyze_duration 5000000 reached at 5000000 microseconds st:1
+[AV_LOG_VERBOSE] Ignoring outlier non primary stream starttime 0.000000
+Input #0, flv, from 'rtmp://10.212.0.157/live/1':
+  Duration: N/A, start: 20.520000, bitrate: N/A
+    Stream #0:0: Data: none
+    Stream #0:1: Video: h264 (High), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 20 fps, 25 tbr, 1k tbn, 40 tbc
 [AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
-[AV_LOG_WARNING] Warning: data is not aligned! This can lead to a speed loss
+[AV_LOG_WARNING] DTS 120 < 108320 out of order
+[AV_LOG_VERBOSE] Statistics: 30936701 bytes read, 0 seeks
+[AV_LOG_PANIC] 
+08320 out of order
+[AV_LOG_WARNING] DTS 120 < 108320 out of order
+[AV_LOG_VERBOSE] Statistics: 89841469 bytes read, 0 seeks
+[AV_LOG_PANIC] 

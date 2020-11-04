@@ -27,6 +27,7 @@ public:
 	bool enQueue(const AVPacket packet);
 	AVPacket deQueue();
 	uint32_t getPacketSize();
+	uint32_t getPacketCount();
 	void queueFlush();
 	virtual ~packetQueue();
 private:
