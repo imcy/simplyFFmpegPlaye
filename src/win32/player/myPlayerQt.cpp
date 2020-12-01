@@ -71,7 +71,6 @@ myPlayerQt::myPlayerQt(QWidget *parent)
 	file.close();
 
 	this->windowWidth = this->width();
-	ui.videoInfoWidget->hide();
 	
 	movie = new QMovie("./Resources/loading.gif");
 	ui.loadingLabel->setAttribute(Qt::WA_TranslucentBackground);
@@ -89,6 +88,10 @@ myPlayerQt::myPlayerQt(QWidget *parent)
 	ui.bufferTime->setText(QString::fromLocal8Bit(textBuf));
 	sprintf(textBuf, "打开时间: %.2f s\n", 0);
 	ui.openTime->setText(QString::fromLocal8Bit(textBuf));
+	addVideoItem(QString::fromLocal8Bit("rtmp://10.212.0.157/live/1"), url);
+	addVideoItem(QString::fromLocal8Bit("rtmp://10.212.0.157/live/2"), url);
+	ui.videoInfoWidget->hide();
+	//resizeEvent(NULL);
 }
 
 
@@ -148,14 +151,14 @@ void myPlayerQt::openVideo(QString name, int type)
 	pauseTime = 0;
 	if (isPlay)
 	{
-		play();
+		close();
 	}
-	else
-	{
-		QElapsedTimer t;
-		t.start();
-		while (t.elapsed() < 1000); // 延时防止ffmpeg阻塞未退出
-	}
+	//else
+	//{
+		QElapsedTimer etime;
+		etime.start();
+		while (etime.elapsed() < 1000); // 延时防止ffmpeg阻塞未退出
+	//}
 
 	if (isPressSlider)
 	{
@@ -198,7 +201,7 @@ void myPlayerQt::openVideo(QString name, int type)
 	readPacketsThread::getInstance()->start();
 	playerMedia::getInstance()->video->isExit = false;
 	playerMedia::getInstance()->video->start();
-	showVideoList();
+	
 	if (media == nullptr)
 	{
 		QMessageBox::warning(this, QString::fromLocal8Bit("错误"), 
@@ -216,6 +219,9 @@ void myPlayerQt::openVideo(QString name, int type)
 	media->type = type;
 	showVideoInfo(media);
 	loadingShow(false, NULL);
+
+	ui.videoListWidget->setVisible(true);
+	resizeEvent(NULL);
 
 	autoPause = false;
 	isPlay = false;
@@ -385,7 +391,7 @@ void myPlayerQt::fullScreen()
 
 void myPlayerQt::showVideoList()
 {
-	if (ui.videoInfoWidget->isVisible())
+	if (ui.videoListWidget->isVisible())
 	{
 		ui.videoInfoWidget->setVisible(false);
 	}
@@ -393,7 +399,8 @@ void myPlayerQt::showVideoList()
 	{
 		ui.videoInfoWidget->setVisible(true);
 	}
-		resizeEvent(NULL);
+	
+	resizeEvent(NULL);
 }
 void myPlayerQt::clickedVideoList(QListWidgetItem *item)
 {
@@ -469,7 +476,7 @@ void myPlayerQt::urlTimeoutCheck(double rate)
 				ui.bufferTime->setText(QString::fromLocal8Bit(textBuf));
 				break;
 			}
-			if (et.elapsed() > 20000)
+			if (et.elapsed() > 2000000)
 			{
 				QString message = "出错！";
 				playerMedia::getInstance()->interruptFlag = true;
@@ -549,7 +556,10 @@ void myPlayerQt::loadingShow(bool isShow, QString text)
 
 void myPlayerQt::timerEvent(QTimerEvent * pEvent)
 {
-
+	if (!isPlay)
+	{
+		return;
+	}
 	if (playerMedia::getInstance()->totalTime > 0)
 	{
 		double pts = (double)playerMedia::getInstance()->pts * 1000;
@@ -575,7 +585,7 @@ void myPlayerQt::timerEvent(QTimerEvent * pEvent)
 	
 	if (playTime.isValid())
 	{
-		sprintf(textBuf, "播放时间: %.2f\n", playTime.elapsed() / 1000.0);
+		sprintf(textBuf, "播放时间: %.2f s\n", playTime.elapsed() / 1000.0);
 		ui.playTime->setText(QString::fromLocal8Bit(textBuf));
 	}
 	

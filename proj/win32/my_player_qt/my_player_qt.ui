@@ -78,7 +78,7 @@ color:rgb(0, 0, 0)</string>
 border:1px</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <property name="styleSheet">
@@ -474,6 +474,12 @@ background-color: transparent;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <zorder>videoInfoWidget</zorder>
+   <zorder>openGL_widget</zorder>
+   <zorder>loadingLabel</zorder>
+   <zorder>iconBackground</zorder>
+   <zorder>groupBox</zorder>
+   <zorder>textLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -640,7 +646,7 @@ background-color: transparent;</string>
    <hints>
     <hint type="sourcelabel">
      <x>350</x>
-     <y>475</y>
+     <y>465</y>
     </hint>
     <hint type="destinationlabel">
      <x>373</x>
@@ -704,7 +710,7 @@ background-color: transparent;</string>
    <hints>
     <hint type="sourcelabel">
      <x>190</x>
-     <y>470</y>
+     <y>460</y>
     </hint>
     <hint type="destinationlabel">
      <x>218</x>
@@ -720,7 +726,7 @@ background-color: transparent;</string>
    <hints>
     <hint type="sourcelabel">
      <x>457</x>
-     <y>470</y>
+     <y>460</y>
     </hint>
     <hint type="destinationlabel">
      <x>455</x>
@@ -916,9 +922,9 @@ background-color: transparent;</string>
   <slot>skipPrevious()</slot>
   <slot>skipNext()</slot>
   <slot>fullScreen()</slot>
-  <slot>showVideoList()</slot>
   <slot>netAddressInput()</slot>
   <slot>seekBack()</slot>
   <slot>seekForward()</slot>
+  <slot>showVideoList()</slot>
  </slots>
 </ui>

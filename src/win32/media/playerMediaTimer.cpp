@@ -92,6 +92,11 @@ void playerMediaTimer::synchronizeAudioAndVideo()
 		// 设置一下帧播放的延迟
 		timer->setInterval(static_cast<int>(actual_delay * 1000 + 0.5));
 	}
+	else
+	{
+		float delay =  ((float)videoCtx->framerate.den / (float)videoCtx->framerate.num) * 1000;
+		timer->setInterval(static_cast<int>(delay));
+	}
 	
 	int linesize[AV_NUM_DATA_POINTERS] = { 0 };
 	uint8_t *data[AV_NUM_DATA_POINTERS] = { 0 };

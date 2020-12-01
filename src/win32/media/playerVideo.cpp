@@ -8,6 +8,7 @@ playerVideo::playerVideo()
 	frameLastPts = 0.0;
 	videoClock = 0.0;
 	videoPackets = new packetQueue;
+	videoContext = nullptr;
 	isExit = false;
 }
 
