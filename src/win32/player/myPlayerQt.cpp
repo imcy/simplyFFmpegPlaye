@@ -88,8 +88,13 @@ myPlayerQt::myPlayerQt(QWidget *parent)
 	ui.bufferTime->setText(QString::fromLocal8Bit(textBuf));
 	sprintf(textBuf, "打开时间: %.2f s\n", 0);
 	ui.openTime->setText(QString::fromLocal8Bit(textBuf));
+
+	sprintf(textBuf, "卡顿次数: %d\n", 0);
+	ui.pauseTime->setText(QString::fromLocal8Bit(textBuf));
+
 	addVideoItem(QString::fromLocal8Bit("rtmp://10.212.0.157/live/1"), url);
 	addVideoItem(QString::fromLocal8Bit("rtmp://10.212.0.157/live/2"), url);
+	addVideoItem(QString::fromLocal8Bit("rtmp://push.v.cc.163.com/pushstation/TESTe797e39d7260608e21337559?wsSecret=047ac1359ff55060734e7e64d37d3de8"), url);
 	ui.videoInfoWidget->hide();
 	//resizeEvent(NULL);
 }
@@ -560,8 +565,9 @@ void myPlayerQt::timerEvent(QTimerEvent * pEvent)
 	{
 		return;
 	}
-	if (playerMedia::getInstance()->totalTime > 0)
-	{
+	
+	//if (playerMedia::getInstance()->totalTime > 0)
+	//{
 		double pts = (double)playerMedia::getInstance()->pts * 1000;
 		double total = (double)playerMedia::getInstance()->totalTime;
 		double rate = pts / total;
@@ -571,7 +577,7 @@ void myPlayerQt::timerEvent(QTimerEvent * pEvent)
 			urlTimeoutCheck(rate);
 		}
 
-	}
+	//}
 	if (playerMedia::getInstance()->video)
 	{
 		sprintf(textBuf, "视频包数目: %d\n", playerMedia::getInstance()->video->getVideoQueueCount());

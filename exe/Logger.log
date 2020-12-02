@@ -3,31 +3,41 @@
 [AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
 [AV_LOG_VERBOSE] max_analyze_duration 5000000 reached at 5000000 microseconds st:1
 [AV_LOG_VERBOSE] Ignoring outlier non primary stream starttime 0.000000
-Input #0, flv, from 'rtmp://10.212.0.157/live/2':
-  Duration: N/A, start: 24.600000, bitrate: N/A
+Input #0, flv, from 'rtmp://10.212.0.157/live/1':
+  Duration: N/A, start: 57.240000, bitrate: N/A
     Stream #0:0: Data: none
     Stream #0:1: Video: h264 (High), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 20 fps, 25 tbr, 1k tbn, 40 tbc
 [AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
-[AV_LOG_VERBOSE] Statistics: 6628510 bytes read, 0 seeks
+[AV_LOG_WARNING] Warning: data is not aligned! This can lead to a speed loss
+[AV_LOG_WARNING] DTS 120 < 108320 out of order
+[AV_LOG_VERBOSE] Statistics: 9807932 bytes read, 0 seeks
 [AV_LOG_VERBOSE] Starting connection attempt to 10.212.0.157 port 1935
 [AV_LOG_VERBOSE] Successfully connected to 10.212.0.157 port 1935
-[AV_LOG_VERBOSE] Reinit context to 864x480, pix_fmt: yuv420p
-[AV_LOG_VERBOSE] max_analyze_duration 5000000 reached at 5016000 microseconds st:1
-[AV_LOG_VERBOSE] Ignoring outlier non primary stream starttime 0.000000
-Input #0, flv, from 'rtmp://10.212.0.157/live/1':
-  Duration: N/A, start: 54.880000, bitrate: N/A
-    Stream #0:0: Data: none
-    Stream #0:1: Video: h264 (High), yuv420p(progressive), 852x480 [SAR 640:639 DAR 16:9], 30.30 fps, 25 tbr, 1k tbn, 60 tbc
-[AV_LOG_VERBOSE] Reinit context to 864x480, pix_fmt: yuv420p
-[AV_LOG_VERBOSE] Statistics: 1137780 bytes read, 0 seeks
+[ERROR] Server error: No such stream
+[ERROR] Wed Dec  2 10:41:45 2020
+Function (playerMedia::open)Line 68: Open input file fail, error code: -1: Operation not permitted
+[INFO] Wed Dec  2 10:41:47 2020
+Function (myPlayerQt::openVideo)Line 209: Media get nullptr, can not open file: rtmp://10.212.0.157/live/1
 [AV_LOG_VERBOSE] Starting connection attempt to 10.212.0.157 port 1935
 [AV_LOG_VERBOSE] Successfully connected to 10.212.0.157 port 1935
-[AV_LOG_VERBOSE] Reinit context to 864x480, pix_fmt: yuv420p
-[AV_LOG_VERBOSE] max_analyze_duration 5000000 reached at 5016000 microseconds st:1
+[AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
+[AV_LOG_VERBOSE] max_analyze_duration 5000000 reached at 5000000 microseconds st:1
 [AV_LOG_VERBOSE] Ignoring outlier non primary stream starttime 0.000000
-Input #0, flv, from 'rtmp://10.212.0.157/live/1':
-  Duration: N/A, start: 48.800000, bitrate: N/A
+Input #0, flv, from 'rtmp://10.212.0.157/live/2':
+  Duration: N/A, start: 4.200000, bitrate: N/A
     Stream #0:0: Data: none
-    Stream #0:1: Video: h264 (High), yuv420p(progressive), 852x480 [SAR 640:639 DAR 16:9], 30.30 fps, 25 tbr, 1k tbn, 60 tbc
-[AV_LOG_VERBOSE] Reinit context to 864x480, pix_fmt: yuv420p
+    Stream #0:1: Video: h264 (High), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 20 fps, 25 tbr, 1k tbn, 40 tbc
+[AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
+[AV_LOG_VERBOSE] Statistics: 2824814 bytes read, 0 seeks
+[AV_LOG_VERBOSE] Starting connection attempt to 10.212.0.157 port 1935
+[AV_LOG_VERBOSE] Successfully connected to 10.212.0.157 port 1935
+[AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
+[AV_LOG_VERBOSE] max_analyze_duration 5000000 reached at 5000000 microseconds st:1
+[AV_LOG_VERBOSE] Ignoring outlier non primary stream starttime 0.000000
+Input #0, flv, from 'rtmp://10.212.0.157/live/2':
+  Duration: N/A, start: 28.680000, bitrate: N/A
+    Stream #0:0: Data: none
+    Stream #0:1: Video: h264 (High), yuv420p(progressive), 1280x720 [SAR 1:1 DAR 16:9], 20 fps, 25 tbr, 1k tbn, 40 tbc
+[AV_LOG_VERBOSE] Reinit context to 1280x720, pix_fmt: yuv420p
+[AV_LOG_VERBOSE] Statistics: 2350703 bytes read, 0 seeks
 [AV_LOG_PANIC] 
