@@ -94,7 +94,7 @@ myPlayerQt::myPlayerQt(QWidget *parent)
 
 	addVideoItem(QString::fromLocal8Bit("rtmp://10.212.0.157/live/1"), url);
 	addVideoItem(QString::fromLocal8Bit("rtmp://10.212.0.157/live/2"), url);
-	addVideoItem(QString::fromLocal8Bit("rtmp://push.v.cc.163.com/pushstation/TESTe797e39d7260608e21337559?wsSecret=047ac1359ff55060734e7e64d37d3de8"), url);
+	addVideoItem(QString::fromLocal8Bit("http://pull.v.cc.163.com/pushstation/TESTe797e39d7260608e21337559.flv?wsSecret=bf87bd53f5ba6e9e976b1e9f44ef458e&wsTime=5ff5a32d"), url);
 	ui.videoInfoWidget->hide();
 	//resizeEvent(NULL);
 }
