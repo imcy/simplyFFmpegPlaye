@@ -440,6 +440,10 @@ void myPlayerQt::urlTimeoutCheck(double rate)
 {
 	if (isPlay && playerMedia::getInstance()->video->getVideoQueueSize() == 0)
 	{
+		if (playerMedia::getInstance()->audio->getAudioQueueSize() > 0)
+		{
+			return;
+		}
 		pauseTime += 1;
 		
 		sprintf(textBuf, "¿¨¶Ù´ÎÊı: %d\n", pauseTime);
