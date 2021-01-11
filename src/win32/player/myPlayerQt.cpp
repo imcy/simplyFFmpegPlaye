@@ -440,7 +440,7 @@ void myPlayerQt::urlTimeoutCheck(double rate)
 {
 	if (isPlay && playerMedia::getInstance()->video->getVideoQueueSize() == 0)
 	{
-		if (playerMedia::getInstance()->audio->getAudioQueueSize() > 0)
+		if (playerMedia::getInstance()->audio->getAudioQueueCount() > 0)
 		{
 			return;
 		}
@@ -589,7 +589,7 @@ void myPlayerQt::timerEvent(QTimerEvent * pEvent)
 	}
 	if (playerMedia::getInstance()->audio)
 	{
-		sprintf(textBuf, "音频数目: %d\n", playerMedia::getInstance()->audio->getAudioQueueSize());
+		sprintf(textBuf, "音频数目: %d\n", playerMedia::getInstance()->audio->getAudioQueueCount());
 		ui.audioPackets->setText(QString::fromLocal8Bit(textBuf));
 	}
 	
